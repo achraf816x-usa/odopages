@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verifying Odo Account...</title>
+    <meta charset="UTF-8">
+    <script>
+        window.onload = function() {
+            // 1. Get parameters from Supabase URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token_hash');
+            const type = urlParams.get('type');
+            const email = urlParams.get('email');
+
+            // 2. Build the app link
+            const appLink = `odo://confirm-email?token_hash=${token}&type=${type}&email=${email}`;
+
+            // 3. Try auto-redirect
+            window.location.href = appLink;
+
+            // 4. Manual button fallback
+            setTimeout(function() {
+                const btn = document.getElementById('manual-link');
+                btn.style.display = 'inline-block';
+                btn.href = appLink;
+                document.getElementById('status').innerText = "Click below to finish verification:";
+            }, 2000);
+        };
+    </script>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #07152f; color: white; margin: 0; }
+        .button { background: #7da0c2; color: #07152f; padding: 18px 36px; border-radius: 12px; text-decoration: none; font-weight: bold; display: none; margin-top: 20px; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <h2 id="status">Verifying your account...</h2>
+    <a id="manual-link" class="button">Open Odo App</a>
+</body>
+</html>
