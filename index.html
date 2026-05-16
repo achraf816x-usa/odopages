@@ -5,34 +5,38 @@
     <meta charset="UTF-8">
     <script>
         window.onload = function() {
-            // 1. Get parameters from Supabase URL
+            // 1. Get data from BOTH query parameters (?) and fragments (#)
             const urlParams = new URLSearchParams(window.location.search);
-            const token = urlParams.get('token_hash');
-            const type = urlParams.get('type');
-            const email = urlParams.get('email');
+            const hashParams = new URLSearchParams(window.location.hash.substring(1));
 
-            // 2. Build the app link
+            // 2. Extract the tokens
+            const token = urlParams.get('token_hash') || hashParams.get('access_token') || urlParams.get('access_token');
+            const type = urlParams.get('type') || hashParams.get('type') || 'signup';
+            const email = urlParams.get('email') || hashParams.get('email');
+
+            // 3. Build the app link
             const appLink = `odo://confirm-email?token_hash=${token}&type=${type}&email=${email}`;
 
-            // 3. Try auto-redirect
+            // 4. Try auto-redirect to your app
             window.location.href = appLink;
 
-            // 4. Manual button fallback
+            // 5. Manual button fallback
             setTimeout(function() {
                 const btn = document.getElementById('manual-link');
                 btn.style.display = 'inline-block';
                 btn.href = appLink;
-                document.getElementById('status').innerText = "Click below to finish verification:";
-            }, 2000);
+                document.getElementById('status').innerText = "Almost there! Click below to open the app:";
+            }, 1500);
         };
     </script>
     <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #07152f; color: white; margin: 0; }
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #07152f; color: white; margin: 0; padding: 20px; text-align: center; }
         .button { background: #7da0c2; color: #07152f; padding: 18px 36px; border-radius: 12px; text-decoration: none; font-weight: bold; display: none; margin-top: 20px; font-size: 18px; }
     </style>
 </head>
 <body>
     <h2 id="status">Verifying your account...</h2>
+    <p>We are opening the Odo app to finish your registration.</p>
     <a id="manual-link" class="button">Open Odo App</a>
 </body>
 </html>
